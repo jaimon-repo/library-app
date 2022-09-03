@@ -3,7 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AngularController;
-
+use App\Http\Controllers\UserController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -19,4 +19,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/library-list', [AngularController::class, 'getLibraryList']);
+
+Route::group(['middleware' => 'auth:sanctum'], function () {
+    //All secure URL's
+    Route::get('/library-list', [AngularController::class, 'getLibraryList']);
+});
+
+//No need to use login/sign up API in auth mode
+Route::post("login", [UserController::class, 'index']);
